@@ -98,7 +98,7 @@ class Cronjob_Model extends CI_Model
 	function get_autoresponder_cronjob_data_only($conditions_array=array(),$rows_per_page=0,$start=0){
                                   
 		$rows=array();
-                    $result=$this->db->query("SELECT * FROM (`red_autoresponder_scheduled` as recs) JOIN `red_email_autoresponders` as rec ON `rec`.`campaign_id`=`recs`.`autoresponder_id` AND rec.autoresponder_scheduled_id=recs.autoresponder_scheduled_id WHERE `recs`.`is_deleted` =  0 AND `rec`.`autoresponder_scheduled_id` != 0 AND `recs`.`autoresponder_scheduled_status` =  1 AND `set_sheduled` =  0 AND `rec`.`campaign_status` =  1 AND `rec`.`is_deleted` =  0 AND `rec`.`is_status` =  0 AND `rec`.`is_verified` =  1 AND (last_run_date IS NULL OR TIMESTAMPDIFF( HOUR , last_run_date, NOW( ) ) >= 1) ORDER BY `recs`.`autoresponder_scheduled_id`");		
+		$result=$this->db->query("SELECT * FROM (`red_autoresponder_scheduled` as recs) JOIN `red_email_autoresponders` as rec ON `rec`.`campaign_id`=`recs`.`autoresponder_id` AND rec.autoresponder_scheduled_id=recs.autoresponder_scheduled_id WHERE `recs`.`is_deleted` =  0 AND `rec`.`autoresponder_scheduled_id` != 0 AND `recs`.`autoresponder_scheduled_status` =  1 AND `set_sheduled` =  0 AND `rec`.`campaign_status` =  1 AND `rec`.`is_deleted` =  0 AND `rec`.`is_status` =  0 AND `rec`.`is_verified` =  1 AND (last_run_date IS NULL OR TIMESTAMPDIFF( HOUR , last_run_date, NOW( ) ) >= 1) ORDER BY `recs`.`autoresponder_scheduled_id`");		
 		
 		foreach($result->result_array() as $row){
 			$rows[]=$row;

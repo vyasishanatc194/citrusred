@@ -134,6 +134,7 @@ $('#piecontainer_abtesting<?php echo $refrenseCampignId; ?>').html("No Report");
 		}
 	  
 	  ?>
+	  
         <table class="report">
 			<tr>
 				<?php if(!empty($email['is_ab'])){
@@ -145,7 +146,6 @@ $('#piecontainer_abtesting<?php echo $refrenseCampignId; ?>').html("No Report");
 						$campaignAbPie = "piecontainer_abtesting_exist".$refrenseCampignId;
 					}
 					?>
-					
 					<td  style="padding: 0px !important;"><h2><?php echo $email['campaign_title']; ?></h2></td>
 					<td style="padding: 0px !important;"><h2><?php echo $email['is_ab'][$refrenseCampignId]['campaign_title']; ?></h2></td>
 				<?php }else{ ?>

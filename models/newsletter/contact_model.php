@@ -74,8 +74,8 @@ class Contact_model extends CI_Model
 	}
 	
 	function get_contacts_detail_in_selected_lists($conditions_array=array(),$subscription_id=array()){
-
 		$this->db->select('distinct res.subscriber_id, res.subscriber_email_address, res.subscriber_first_name, res.subscriber_last_name, res.subscriber_state, res.subscriber_zip_code, res.subscriber_country, res.subscriber_company, res.subscriber_city, res.subscriber_dob, res.subscriber_phone, res.subscriber_address,res.subscriber_date_added, res.subscriber_ip, res.subscriber_extra_fields',false);
+			
 		$this->db->from('red_email_subscribers as res');
 		if(!(in_array('-'.$this->session->userdata('member_id'),$subscription_id))){
 			$this->db->join('red_email_subscription_subscriber as ress','res.subscriber_id =ress.subscriber_id', 'left');			 
@@ -91,6 +91,33 @@ class Contact_model extends CI_Model
 		$retval = $result->result_array();		
 		$result->free_result();
 		return $retval;	
+	}
+	
+		/*Function for csv export*/
+        function get_contacts_detail_in_selected_lists_csv($conditions_array=array(),$subscription_id=array()){
+		//$this->db->select('distinct res.subscriber_id, res.subscriber_email_address, res.subscriber_first_name, res.subscriber_last_name, res.subscriber_state, res.subscriber_zip_code, res.subscriber_country, res.subscriber_company, res.subscriber_city, res.subscriber_dob, res.subscriber_phone, res.subscriber_address,res.subscriber_date_added, res.subscriber_ip',false);
+		$this->db->select('distinct res.subscriber_id, res.subscriber_email_address, res.subscriber_first_name, res.subscriber_last_name, res.subscriber_state, res.subscriber_zip_code, res.subscriber_country, res.subscriber_company, res.subscriber_city, res.subscriber_dob, res.subscriber_phone, res.subscriber_address,res.subscriber_date_added, res.subscriber_ip, res.subscriber_extra_fields',false);
+
+ 		
+		$this->db->from('red_email_subscribers as res');
+		if(!(in_array('-'.$this->session->userdata('member_id'),$subscription_id))){
+			$this->db->join('red_email_subscription_subscriber as ress','res.subscriber_id =ress.subscriber_id', 'left');			 
+		}
+		$this->db->where($conditions_array, NULL, FALSE);		
+		if(count($subscription_id)>0){
+			if(!(in_array('-'.$this->session->userdata('member_id'),$subscription_id))){			
+				#$this->db->where_in('ress.subscription_id', $subscription_id);
+				$this->db->where('ress.subscription_id', $subscription_id[0]);
+			}
+		}	
+
+		$result=$this->db->get();			
+		$retval = $result->result_array();	
+                foreach($retval as $ret_k => $ret_val){
+                    $finalArray[$ret_val['subscriber_id']] = $ret_val;
+                }
+		$result->free_result();
+		return $finalArray;	
 	}
 	/**
 	* Function to delete contacts from List

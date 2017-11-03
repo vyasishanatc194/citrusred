@@ -38,7 +38,7 @@
           <?php }else if(($campaign['campaign_status']!='active')&&($campaign['campaign_status']!='ready')&&($campaign['campaign_status']!='unapproved')){ ?>
             <a <?php if($campaign_data['upgrade_package']==1) {?>onclick="fancyAlert('You are over your current plan limit. Please Upgrade Now.');" <?php } ?> href='javascript:void(0);' onclick="javascript:window.location.href='<?php echo  site_url("newsletter/campaign_email_setting/index/".$campaign['campaign_id']);?>';" title="Send" class="btn cancel"><i class="icon-envelope"></i></a>
           <?php }else if($campaign['campaign_status']=='active'){
-			  $encoded_url = 'https://www.facebook.com/sharer/sharer.php?u='.rawurlencode(CAMPAIGN_DOMAIN.'c/'.$campaign_data['campaign_id']).'';
+			   $encoded_url = 'https://www.facebook.com/sharer/sharer.php?u='.rawurlencode(CAMPAIGN_DOMAIN.'c/'.$campaign_data['campaign_id']).'';
 
 		  ?>
           <!--  <a href="http://www.facebook.com/share.php?u=<?php echo CAMPAIGN_DOMAIN.'c/'.$campaign['campaign_id'];?>&t=<?php echo $campaign['email_subject']?>" title="Click to share this post on Facebook" target="_blank" class="btn cancel"><i class="icon-facebook"></i></a>

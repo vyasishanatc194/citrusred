@@ -158,26 +158,19 @@ class datavalidation_cron extends CI_Controller {
                 
                 $json_response = json_decode($response);
                 $gradeArray = $json_response->job[0]->stats->grade;		
-		    $finalArray = array();
-				foreach($gradeArray AS $gradeKey => $gradeValue){					
-					$finalArray[$gradeKey] = $gradeValue->name." = ".$gradeValue->count;
-				}
-				
-				$newfinalcode = implode(",",$finalArray);
                 $unquieGradeId =  $gradeArray[0]->name;//key((array)$gradeArray);
 				                
-                $this->Croncb_Model->update_CsvLog(array('dv_export_status' => 1, 'dv_batch_run' => 1, 'dv_batch_grade' => $newfinalcode, 'dv_batch_rundate' => date('Y-m-d H:i:s')), 
+                $this->Croncb_Model->update_CsvLog(array('dv_export_status' => 1, 'dv_batch_run' => 1, 'dv_batch_grade' => $unquieGradeId, 'dv_batch_rundate' => date('Y-m-d H:i:s')), 
 													array('dv_id' => $cv_value['dv_id']));
 
                 
-               /* if ($unquieGradeId == 'C' || $unquieGradeId == 'D' || $unquieGradeId == 'F') {
+                if ($unquieGradeId == 'C' || $unquieGradeId == 'D' || $unquieGradeId == 'F') {
                     $inputArray_csv = array('dv_batch_grade' => $unquieGradeId, 'subscriber_status' => 5, 'status_change_date' => date('Y-m-d H:i:s'));
                 } else {
                     $inputArray_csv = array('dv_batch_grade' => $unquieGradeId);
                 }
 			    $this->Croncb_Model->update_account($inputArray_csv, array('subscriber_created_by' => $cv_value['rc_member_id']));			
-           */
-	    }
+            }
             curl_close($session);
         }
     }    
@@ -229,16 +222,11 @@ class datavalidation_cron extends CI_Controller {
 					foreach ($readCsv as $r_key => $r_value) {
 						$unquieId = $r_value[0];
 						$unquieGradeId = $r_value[2];
-						if($cv_value['is_paid'] == 1){
-							if ($unquieGradeId == 'C' || $unquieGradeId == 'D' || $unquieGradeId == 'F') {
-								$inputArray_csv = array("dv_grade" => $unquieGradeId, "subscriber_status" => 5);
-							}else{
-								$inputArray_csv = array("dv_grade" => $unquieGradeId);
-							}
-						}
-						else {
-								$inputArray_csv = array("dv_grade" => $unquieGradeId);
-							}                  
+						if ($unquieGradeId == 'C' || $unquieGradeId == 'D' || $unquieGradeId == 'F') {
+							$inputArray_csv = array("dv_grade" => $unquieGradeId, "subscriber_status" => 5);
+						} else {
+							$inputArray_csv = array("dv_grade" => $unquieGradeId);
+						}                    
 						$this->Croncb_Model->update_account($inputArray_csv, array("subscriber_id" => $unquieId));
 					}
 					/* End Code to read data in csv */

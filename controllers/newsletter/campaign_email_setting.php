@@ -396,8 +396,8 @@ class Campaign_email_setting extends CI_Controller
 				}
 			}
 		}
-		//$number = $this->UserModel->getRemainingCampaignSendingQuota($this->session->userdata('member_id'))//-$totalcontacts;
-		$number = $get_package[0]['max_campaign_quota'] - $get_package[0]['campaign_sent_counter']-$totalcontacts;
+		$number = $this->UserModel->getRemainingCampaignSendingQuota($this->session->userdata('member_id'));//-$totalcontacts;
+		//$number = $get_package[0]['max_campaign_quota'] - $get_package[0]['campaign_sent_counter']-$totalcontacts;
 		$quota_remaining =  ($number > 0)? $number : '0';
 		# Recieve any messages to be shown, when campaign is added or updated
 		$messages=$this->messages->get();

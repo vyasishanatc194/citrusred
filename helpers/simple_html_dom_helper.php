@@ -6,7 +6,8 @@ require_once("simple_html_dom/simple_html_dom.php");
 //require_once("htmlfixer.class.php");	
 require_once("format.php");	
 function remove_extra_html($campaign_id, $html="", $is_autoresponder =0){
-	
+	ini_set('allow_url_fopen',1);
+
 	$upload_path= config_item('user_public');
 	$CI =& get_instance();
 	$user_dir = $CI->session->userdata('member_id') % 1000;
@@ -33,7 +34,7 @@ function remove_extra_html($campaign_id, $html="", $is_autoresponder =0){
 		$header_height=substr($header_height,0,-2);
 		$width=595;
 		$height=$width/$ratio_orig;
-		$header_height=intval($height);
+		//$header_height=intval($height);
 		$e->height=$header_height;
 	}
 	$logo_display=false;

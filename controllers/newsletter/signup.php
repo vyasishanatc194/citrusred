@@ -490,18 +490,18 @@ Thank You!
 				if($signup_data_array['form'][0]['single_opt_in'] == '1'  and !in_array($this->member_id, $this->arrMemberHavingSingleOptinWithoutCaptcha)){ 
 				$captcha = (isset($_GET['g-recaptcha-response']))?$_GET['g-recaptcha-response']: false;
 
-				if(!$captcha){ 
-				  redirect(base_url().'newsletter/signup/signupform_url/'.$form_id);
-				  echo '<p style="color:red">Please check the captcha form.</p>';
-				  exit;
+					if(!$captcha){ 
+					  redirect(base_url().'newsletter/signup/signupform_url/'.$form_id);
+					  echo '<p style="color:red">Please check the captcha form.</p>';
+					  exit;
+					}
+					$response=json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LfJ8wgTAAAAAL3feWmqDYLOoY2zSAsk4gkt9que&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']), true);
+					if($response['success'] === false){
+					  redirect(base_url().'newsletter/signup/signupform_url/'.$form_id);
+					  echo '<P style="color:red">You are spammer ! Get the @$%K out</P>';
+					  exit;
+					} 									
 				}
-				$response=json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LfJ8wgTAAAAAL3feWmqDYLOoY2zSAsk4gkt9que&response=".$captcha."&remoteip=".$_SERVER['REMOTE_ADDR']), true);
-				if($response['success'] === false){
-				  redirect(base_url().'newsletter/signup/signupform_url/'.$form_id);
-				  echo '<P style="color:red">You are spammer ! Get the @$%K out</P>';
-				  exit;
-				} 									
-			}
 				$signup_data = array();
 				$serialize_data = array();
 				$signup_data['subscriber_first_name']="";
@@ -542,16 +542,23 @@ Thank You!
 						}elseif($this->isPhone($k)){
 							$signup_data['subscriber_phone']=trim($v);
 						}else{
-							if($v !== FALSE && is_array($v)){						
-								if(array_keys($v) == array('m','d','Y')){
-									$v = date("F d, Y", mktime(null, null, null, $v['m'],$v['d'],$v['Y']));
-								}else{
-									$v = array_map('trim', $v);
-									$v	= implode(',', $v) ;
-								}
-							}	
-							$serialize_data[$k]=$v;
 							
+							$findme   = 'jsonp';
+							$pos = strpos($v, $findme);
+							
+							if ($pos === false) {
+								if($v !== FALSE && is_array($v)){						
+									if(array_keys($v) == array('m','d','Y')){
+										$v = date("F d, Y", mktime(null, null, null, $v['m'],$v['d'],$v['Y']));
+									}else{
+										$v = array_map('trim', $v);
+										$v	= implode(',', $v) ;
+									}
+								}	
+								$serialize_data[$k]=$v;
+							}else{	
+								
+							}
 						}
 					}					
 				}
@@ -620,7 +627,7 @@ Thank You!
 				
 			//	if (validation_errors()) {
 					$jsonArray['msg'] = 'err';
-					$jsonArray['validation'] = '<div style="color:#FF0000;display: inline-block;font-size: 15px;font-weight: bold;  line-height: 20px;" >Email Address already exists in the list</div>';
+					$jsonArray['validation'] = '<div style="color:#FF0000;display: inline-block;font-size: 15px;font-weight: bold;  line-height: 20px;" >Your already signed up for this mailing list. Please enter a different email address.</div>';
 					echo $_GET['callback']."(".json_encode($jsonArray).");"; 
 					exit;
 					$border_style = 'style="border:1px solid red !important;"';
@@ -868,7 +875,7 @@ Thank You!
 			//$copy_code.= " \n <script type=\"text/javascript\"> \n $(document).ready(function() { \n";
 			//$copy_code.= $frmJs ;
 			//$copy_code.= " \n }); \n </script>";
-			$copy_code.= "\n <script type=\"text/javascript\"> \n";
+			$copy_code .= "\n <script type=\"text/javascript\"> \n";
 			$copy_code .= "\n var jq = document.createElement(\"script\"); \n";
 			$copy_code .= "\n jq.addEventListener(\"load\", proceed);  \n";
 			$copy_code .= "\n jq.src = '".site_url()."webappassets/js/jquery-1.4.4.min.js?v=6-20-13'; \n"; 
@@ -1203,7 +1210,7 @@ Thank You!
 			//	set validation message
 			if($subscriber_array[0]['subscriber_status']==1){
 				if($this->checkSubscriberInList($formid, $subscriber_array[0]['subscriber_id']) == 'yes'){
-					$this->form_validation->set_message('email_check', '%s already exists in this list');
+					$this->form_validation->set_message('email_check', 'Your already signed up for this mailing list. Please enter a different %s address.');
 					return FALSE;
 				}else{
 					return true;

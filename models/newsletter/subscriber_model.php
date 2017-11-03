@@ -685,6 +685,254 @@ class Subscriber_Model extends CI_Model {
         $result->free_result();
         return $rows;
     }
+	
+	/**
+     * 	Function update_subscriber_custom
+     *
+     * 	Function to update existing subscriber custom info
+     *
+     * 	@param (array) (input_array)  values to update into database
+     *
+     * 	@param (array) (conditions_array)  conditions to checked with database with conditions
+     *
+     * 	@return (int)	return updated subscriber id
+     */
+    function update_subscriber_custom($input_array, $conditions_array, $where_in = false, $where_in_subscriber = array()) {
+		print_r($input_array);exit;
+        if ($where_in) {
+            $this->db->where_in('subscriber_id', $this->input->get_post('subscriber_id', true));
+        }
+        if (count($where_in_subscriber) > 0) {
+            $this->db->where_in('subscriber_id', $where_in_subscriber);
+        }
+        $this->db->update('red_subsciber_extra_fields', $input_array, $conditions_array);
+		echo $this->db->last_query();exit;
+        return $this->db->get('red_subsciber_extra_fields')->row()->id;
+        //return $this->db->affected_rows();
+    }
+	
+	
+	 function update_custom_ref($input_array, $conditions_array) {
+
+
+        $this->db->update('red_extra_fields_ref', $input_array, $conditions_array);
+        //return $this->db->get('red_subsciber_extra_fields')->row()->id;
+        return $this->db->affected_rows();
+    }
+
+    function update_global_ref($input_array, $conditions_array) {
+
+
+        $this->db->update('red_global_fields_ref', $input_array, $conditions_array);
+
+        //return $this->db->get('red_subsciber_extra_fields')->row()->id;
+        return $this->db->affected_rows();
+    }
+
+    function create_subscriber_custom($input_array) {
+        # added for the subscription_id for All My Contact in DB_Tbl red_email_subscribers
+
+        $this->db->insert('red_subsciber_extra_fields', $input_array);
+        return $this->db->insert_id();
+    }
+
+    /*     * ********** Add entry of custom fields in reference *************** */
+
+    function create_subscriber_custom_ref($input_array) {
+
+
+        $this->db->insert('red_extra_fields_ref', $input_array);
+        return $this->db->insert_id();
+    }
+
+    function create_subscriber_global($input_array) {
+        # added for the subscription_id for All My Contact in DB_Tbl red_email_subscribers
+
+        $this->db->insert('red_global_fields', $input_array);
+        return $this->db->insert_id();
+    }
+
+    function create_subscriber_global_ref($input_array) {
+
+
+        $this->db->insert('red_global_fields_ref', $input_array);
+        return $this->db->insert_id();
+    }
+	
+	
+	 /* GEt custom field key */
+
+    function get_custom_field($where) {
+        $retval = 0;
+        $this->db->select('*');
+        $this->db->from('red_subsciber_extra_fields as red');
+        $this->db->join('red_extra_fields_ref as ref', 'red.id =ref.ex_ref_id', 'left');
+        $this->db->where($where);
+
+
+        $result = $this->db->get();
+
+        foreach ($result->result_array() as $row => $val) {
+
+            $rows[$row]['id'] = $val['id'];
+            $rows[$row]['key'] = $val['key'];
+        }
+        $result->free_result();
+        return $rows;
+    }
+
+    /* GEt custom field key->value */
+
+    function get_custom_field_val($where = false) {
+
+        $retval = 0;
+        $this->db->select('*');
+        $this->db->from('red_subsciber_extra_fields as red');
+        $this->db->join('red_extra_fields_ref as ref', 'red.id =ref.ex_ref_id', 'left');
+        if($where){
+            $this->db->where($where);
+        }
+
+
+        $result = $this->db->get();
+
+        foreach ($result->result_array() as $row => $val) {
+            $rows[$row]['id'] = $val['id'];
+            $rows[$row]['key'] = $val['key'];
+            $rows[$row]['value'] = $val['value'];
+            $rows[$row]['is_global'] = $val['is_global'];
+			$rows[$row]['subscriber_id'] = $val['subscriber_id'];
+        }
+        $result->free_result();
+        return $rows;
+    }
+
+    /* Find global field key->value */
+
+    function get_global_field($where=false) {
+        $retval = 0;
+        $this->db->select('*');
+        $this->db->from('red_global_fields as red');
+        $this->db->join('red_global_fields_ref as ref', 'red.id =ref.glob_ref_id', 'left');
+        if($where){$this->db->where($where);}
+        $this->db->order_by("ref.glob_id", "desc");
+
+
+        $result = $this->db->get();
+
+        foreach ($result->result_array() as $row => $val) {
+            #echo "<pre>";print_r($val);
+			if($val['global_key'] != ''){
+				$rows[$row]['id'] = $val['id'];
+				$rows[$row]['glob_id'] = $val['glob_id'];
+				$rows[$row]['glob_ref_id'] = $val['glob_ref_id'];
+				$rows[$row]['subscriber_id'] = $val['subscriber_id'];
+				$rows[$row]['key'] = $val['global_key'];
+				$rows[$row]['value'] = $val['value'];
+			}
+        }#exit;
+        $result->free_result();
+        return $rows;
+    }
+	
+	
+	 function get_global_field_importcsv($where=false) {
+        $retval = 0;
+        $this->db->select('red.global_key,red.id');
+        $this->db->from('red_global_fields as red');
+       // $this->db->join('red_global_fields_ref as ref', 'red.id =ref.glob_ref_id', 'left');
+        if($where){$this->db->where($where);}
+       
+        $result = $this->db->get();
+
+        foreach ($result->result_array() as $row => $val) {
+            #echo "<pre>";print_r($val);
+			if($val['global_key'] != ''){
+				$rows[$row]['id'] = $val['id'];
+				$rows[$row]['key'] = $val['global_key'];
+			}
+        }#exit;
+        $result->free_result();
+        return $rows;
+    }
+	
+	
+
+function get_global($where) {
+        $retval = 0;
+        $this->db->select('*');
+        $this->db->from('red_global_fields as red');
+        //$this->db->join('red_global_fields_ref as ref', 'red.id =ref.glob_ref_id', 'left');
+        $this->db->where($where);
+        //$this->db->order_by("ref.glob_id", "desc");
+
+
+        $result = $this->db->get();
+
+        foreach ($result->result_array() as $row => $val) {
+            #echo "<pre>";print_r($val);
+            $rows[$row]['id'] = $val['id'];
+            $rows[$row]['key'] = $val['global_key'];
+            $rows[$row]['member_id'] = $val['member_id'];
+           
+        }#exit;
+        $result->free_result();
+        return $rows;
+    }
+	
+	
+	function get_global_for_cron($where) {
+        $retval = 0;
+        $this->db->select('red.global_key');
+        $this->db->from('red_global_fields as red');
+        $this->db->where($where);
+        
+        $result = $this->db->get();
+
+        foreach ($result->result_array() as $row => $val) {
+           $rows[$row] = $val['global_key'];
+        }
+        $result->free_result();
+        return $rows;
+    }
+
+    function get_global_field_val($where) {
+
+        $retval = 0;
+        $this->db->select('*');
+        $this->db->from('red_global_fields as red');
+        $this->db->join('red_global_fields_ref as ref', 'red.id =ref.glob_ref_id', 'left');
+        $this->db->where($where);
+
+
+        $result = $this->db->get();
+
+        foreach ($result->result_array() as $row => $val) {
+            $rows[$val['glob_ref_id']] = $val['value'];
+        }
+        $result->free_result();
+        return $rows;
+    }
+
+    function get_global_ref_id($where) {
+
+        $retval = 0;
+        $this->db->select('*');
+        $this->db->from('red_global_fields as red');
+        $this->db->join('red_global_fields_ref as ref', 'red.id =ref.glob_ref_id', 'left');
+        $this->db->where($where);
+
+
+        $result = $this->db->get();
+
+        foreach ($result->result_array() as $row => $val) {
+            $rows[$row]['id'] = $val['glob_ref_id'];
+        }
+        $result->free_result();
+        return $rows;
+    }
+
+   
 
 }
 

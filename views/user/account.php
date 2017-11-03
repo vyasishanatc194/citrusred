@@ -198,7 +198,52 @@ function showCustom(dpdCountry){
           </tr>
           <?php } ?>
         </table>
-      <?php } ?>
+	  <?php } ?>
+	  <?php if($package_detail['package_recurring_interval'] == 'credit'){  ?>
+		<h2>My Email Credits</h2>
+        <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <th>Credits Purchased</th>
+            <td><?php echo $max_Email = ($package_detail['max_campaign_quota'] >  0)? $package_detail['max_campaign_quota'] : $userCredit['max_email'];?></td>
+          </tr>
+		  <tr>
+            <th>Credits Used</th>
+            <td><?php echo $package_detail['campaign_sent_counter'];?></td>
+          </tr>
+          <tr>
+            <th>Credits Available</th>
+            <td><?php echo $max_Email - $package_detail['campaign_sent_counter'];?></td>
+          </tr>
+		  
+          
+        </table>
+      <h2>Purchased Credits <a href="<?php echo site_url('account/credit_view_all'); ?>" class="btn cancel">View All</a></h2>
+        <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <th>Date</th>
+            <th>Email Credits</th>
+            <th>Amount</th>
+          </tr>
+          <?php 
+          if(count($getCreditList) > 0 ){ 
+            foreach($getCreditList as $creditList){ ?>
+          <tr>
+            <td>
+              <?php 
+                $datetime = strtotime($creditList['create_date']);
+                $date = date("M d, Y", $datetime);
+                echo '<strong>'.$date.'</strong>';
+              ?>
+            </td>
+            <td><?php echo $creditList['credit_count'];?></td>
+            <td><?php echo '$'.round($creditList['total_price'],2);?></td>
+          </tr>
+          
+          <?php } } ?>
+          
+          
+        </table>
+	  <?php } ?>
     </div>
   </div>
 </div>

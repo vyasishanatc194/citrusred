@@ -9,8 +9,10 @@ class Ajax extends CI_Controller {
 			redirect('user/index');
 		$this->load->model('newsletter/Campaign_Model');
 		$this->load->model('payment/payment_model');
+		$this->load->model('UserModel');
 		$this->load->library('upload');
 		$this->load->helper('notification');
+		$this->load->model('newsletter/Signup_Model');
 		
 		// Check if folder with modulo of User ID exists on server
 		$user_dir = $this->session->userdata('member_id') % 1000;
@@ -141,7 +143,7 @@ class Ajax extends CI_Controller {
 		//$file_name = date('YmdHis').'-'.preg_replace('#[ _0-9-]+(?=\.[a-z]+$)#i', '', $file_name);
 		$config['upload_path'] = $upload_path;
 		$config['allowed_types'] = 'gif|jpg|png|jpeg';
-		$config['max_size']	= 1024*2; //2MB
+		$config['max_size']	= 1024*10; //2MB
 		$config['file_name']	= $file_name;
 		
 		$this->upload->initialize($config);		
@@ -327,9 +329,26 @@ class Ajax extends CI_Controller {
 		echo json_encode($data);
 	}
 	
-	function fetchPayableAmount(){		
+	function fetchPayableAmount(){	
+	
 		$strCouponCode = $this->input->post('ccode');
 		echo ($this->payment_model->getCouponDetail($strCouponCode));	 
 	}
+	
+	/*******************Check member package******************** start code by cb*/
+	function checkMamberPackage($memberId){
+		$userPackage = $this->UserModel->get_user_package(array('member_id'=>$memberId));
+		if($userPackage[0]['package_recurring_interval'] == 'credit'){
+			$JSONARRAY = Array(
+				'STATUS' => 'Success',
+			);
+		}else{
+			$JSONARRAY = Array(
+				'STATUS' => 'Failed',
+			);
+		}
+		echo json_encode($JSONARRAY);
+	}
+/*****************End code by cb***************/
 }
 ?>

@@ -88,11 +88,6 @@ class Packages_Manage extends CI_Controller
 			// To check form is validated
 			if($this->form_validation->run()==true)
 			{
-				if(isset($_POST['is_quote'])){
-					$quote = 1;
-				}else{
-					$quote = 0;
-				}	
 				$input_array=array(
 				'package_type'=>$this->input->post('package_type',true),
 				'package_title'=>$this->input->post('package_title',true),
@@ -103,9 +98,7 @@ class Packages_Manage extends CI_Controller
 				'package_min_contacts'=>$this->input->post('package_min_contacts',true),
 				'package_max_contacts'=>$this->input->post('package_max_contacts',true),
 				'quota_multiplier'=>$this->input->post('quota_multiplier',true),
-				'package_status'=>$this->input->post('package_status',true),
-				'is_new'=>$this->input->post('is_new',true),
-				'is_quote'=>$quote
+				'package_status'=>$this->input->post('package_status',true)
 				);
 				
 				$this->UserModel->create_package($input_array);
@@ -144,16 +137,10 @@ class Packages_Manage extends CI_Controller
 			$this->form_validation->set_rules('package_max_contacts', 'Package Max Contacts', 'required|trim|integer');
 			$this->form_validation->set_rules('quota_multiplier', 'Campaign Sending quota multiplier', 'required|trim|integer');
 			$this->form_validation->set_rules('package_status', 'Package Status', 'required|trim');
-			$this->form_validation->set_rules('is_new', 'New old', 'required|trim');
 			
 			// To check form is validated
 			if($this->form_validation->run()==true)
 			{
-				if(isset($_POST['is_quote'])){
-					$quote = 1;
-				}else{
-					$quote = 0;
-				}	
 				$input_array=array(
 				'package_type'=>$this->input->post('package_type',true),
 				'package_title'=>$this->input->post('package_title',true),
@@ -164,10 +151,7 @@ class Packages_Manage extends CI_Controller
 				'package_min_contacts'=>$this->input->post('package_min_contacts',true),
 				'package_max_contacts'=>$this->input->post('package_max_contacts',true),
 				'quota_multiplier'=>$this->input->post('quota_multiplier',true),
-				'package_status'=>$this->input->post('package_status',true),
-				'is_new'=>$this->input->post('is_new',true),
-				//'is_quote'=>$this->input->post('is_quote',true)
-				'is_quote'=>$quote
+				'package_status'=>$this->input->post('package_status',true)
 				);
 				
 				$conditions_array=array('package_id'=>$package_id);

@@ -23,15 +23,15 @@ class Account extends CI_Controller
 		// To check if form is submitted
 		if($this->input->post('action')=='Save'){
 			// Validation rules are applied
-			$this->form_validation->set_rules('first_name', 'First name', 'required');
-			$this->form_validation->set_rules('last_name', 'Last name', 'required');
+			/* $this->form_validation->set_rules('first_name', 'First name', 'required');
+			$this->form_validation->set_rules('last_name', 'Last name', 'required'); */
 			$this->form_validation->set_rules('email_address', 'Email address', 'required|valid_email');
-			$this->form_validation->set_rules('company', 'Company', 'required');
+			/* $this->form_validation->set_rules('company', 'Company', 'required');
 			$this->form_validation->set_rules('address_line_1', 'Address', 'required');
 			$this->form_validation->set_rules('city', 'City', 'required');
 			$this->form_validation->set_rules('state', 'State', 'required');
 			$this->form_validation->set_rules('zipcode', 'Zip code', 'required');
-			$this->form_validation->set_rules('country', 'Country', 'required');
+			$this->form_validation->set_rules('country', 'Country', 'required'); */
 			
 			// To check form is validated
 			if($this->form_validation->run()==true){
@@ -79,12 +79,14 @@ class Account extends CI_Controller
 			$user_credit_card_info[0]['campaign_sent_counter'] = $user_credit_card_info[0]['campaign_sent_counter'] + $rsCountContactsInQueueu->row()->c;			 
 			$rsCountContactsInQueueu->free_result();
 		}
-		 $package_detail = $this->UserModel->get_user_package(array('member_id' => $thisMid));
+		$userCredit = $this->UserModel->getMemberEmailSendCount($this->session->userdata('member_id'));
+		$package_detail = $this->UserModel->get_user_package(array('member_id' => $thisMid));
 		//Fetch Country name
 		$country_info=$this->UserModel->get_country_data();
+		$getCreditList = $this->UserModel->getCreditPackage(array('member_id' => $thisMid,'payment_process'=> '1'),5);
 		//Loads header, my account and footer view.
 		$this->load->view('header',array('title'=>'My Account'));
-		$this->load->view('user/account',array('package_detail'=>$package_detail[0],'user_info'=>$user_data,'user_transactions'=>$user_transactions,'user_credit_card_info'=>$user_credit_card_info[0],'messages'=>$messages,'country_info'=>$country_info));
+		$this->load->view('user/account',array('package_detail'=>$package_detail[0],'user_info'=>$user_data,'user_transactions'=>$user_transactions,'user_credit_card_info'=>$user_credit_card_info[0],'messages'=>$messages,'country_info'=>$country_info,'userCredit'=>$userCredit[0],'getCreditList'=>$getCreditList));
 		$this->load->view('footer');
 	}
 	function add_another_emailid($eml=''){
@@ -129,6 +131,24 @@ class Account extends CI_Controller
 		$this->load->view('user/invoices_list',array('user_transactions'=>$user_transactions));
 		$this->load->view('footer-inner-red');
 	}
+	
+	/**
+	  *	Function to display list of all transaction in fancybox
+	 */ 
+	function credit_view_all(){
+		$user_transactions_credit=array();
+		$user_transactions_credit=$this->UserModel->getCreditPackage(array('member_id'=>$this->session->userdata('member_id'),'payment_process'=> '1'),0);
+		if($_SERVER['HTTP_REFERER']!=base_url()."account/credit_view_all"){
+			$this->session->set_userdata('HTTP_REFERER', $_SERVER['HTTP_REFERER']);
+			$previous_page_url=$_SERVER['HTTP_REFERER'];
+		}else{
+			$previous_page_url=$this->session->userdata('HTTP_REFERER');
+		}
+		//Loads header, Invoices list and footer view.
+		$this->load->view('header',array('title'=>'My Invoices','previous_page_url'=>$previous_page_url));
+		$this->load->view('user/invoices_list',array('user_transactions_credit'=>$user_transactions_credit));
+		$this->load->view('footer-inner-red');
+	}
 	/**
 	  * Function to display transaction detail
 	 */
@@ -136,9 +156,14 @@ class Account extends CI_Controller
 		 
 		$user_packages=array();
 		$user_transactions=$this->UserModel->get_user_transactions(array('user_id'=>$this->session->userdata('member_id'),'transaction_id'=>$id),0);
-		/* echo "<pre>";
+		if($user_transactions[0]['package_recurring_interval'] == 'credit'){
+			$userCredit['credit_id'] = $user_transactions[0]['payment_table_id'];
+			$getCreditDetail = $this->UserModel->getCreditPackage($userCredit);
+			$user_transactions[0]['credit_count'] = $getCreditDetail[0]['credit_count'];
+		}
+		 /*echo "<pre>";
 		print_R($user_transactions);
-		die; */
+		die;  */
 		$previous_page_url=base_url()."account/index";
 		$this->load->view('user/billing_detail',array('user_transactions'=>$user_transactions[0]));
 	}

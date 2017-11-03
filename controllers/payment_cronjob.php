@@ -63,7 +63,7 @@ class Payment_cronjob extends CI_Controller
 			# Make a payement  ##
 			#####################
 			foreach($user_profile_arr as $user){
-				if ($user_profile_arr['payment_type'] == 0) {
+				if ($user['payment_type'] == 0) {
 					if($user['cancel_subscription_date']!== NULL){
 						#cancler payment profile of user's who have cacel their subscription
 						$this->cancel_subscription($user['member_id']);

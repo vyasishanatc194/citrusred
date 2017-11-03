@@ -345,15 +345,15 @@ foreach($users as $user){
 		}
 			?>
 			
-		<?php
-		if($user['payment_type'] == 1){
-			$payment_type = 'Paypal';
-			$email_text = 'PayPal Email:';
-		}else{
-			$payment_type = 'Credit Card';
-			$email_text = 'Email:';
-		}
-		?>
+			<?php
+			if($user['payment_type'] == 1){
+				$payment_type = 'Paypal';
+				$email_text = 'PayPal Email:';
+			}else{
+				$payment_type = 'Credit Card';
+				$email_text = 'Email:';
+			}
+			?>
 		<label style="color:<?php echo $color;?>;font-weight:bold;">
 		<?php echo $user['member_username']; ?><?php echo (trim($user['ls_site_id'])!='')? ' ['.$user['ls_site_id'].']' : '';?></label>
 		<br/>
@@ -463,8 +463,7 @@ foreach($users as $user){
 				foreach($user['arr_message'] as $msg_rec){
 					echo "<option value=\"{$msg_rec['message_id']}\">{$msg_rec['message_name']}</option>";
 				}
-			}	
-			?>
+			}?>
 		</select> 
 		<input name='btnAttachMsg' id="btnAttachMsg_<?php echo $user['member_id'];?>" class="clAttachMsg" type='button' value=' Attach ' />		
 	</td></tr>

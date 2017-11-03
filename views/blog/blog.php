@@ -1,10 +1,3 @@
-    <?php
-    $this->load->helper('url');
-    $url = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    if (strpos($url, $this->config->item('redirect_url')) > 0) {
-        redirect('https://www.getredcappi.com/blog');
-    }
-    ?>
 <script type="text/javascript">
   $("#search_text").live('focus',function(event){
     if($(this).val()=="Search..."){

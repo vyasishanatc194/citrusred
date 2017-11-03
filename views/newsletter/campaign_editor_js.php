@@ -600,7 +600,7 @@ function checkYoutubevideoOrVimeovideo(){
 
 	var url="";
 	url=$('#fancybox-wrap').find("#youtube_url").val();
-	var matches = url.match(/^(https?:\/\/)?([^\/]*\.)?youtube\.com\/watch\?([^]*&)?v=\-\w+(&[^]*)?/i);
+	var matches = url.match(/^(https?:\/\/)?([^\/]*\.)?youtube\.com\/watch\?([^]*&)?v=\w+(&[^]*)?/i);
 	if(matches){
 		youtubeUrlUpdate()
 	}else{
@@ -616,7 +616,7 @@ $('#fancybox-wrap').find('.youtube_msg').show();
 $('#fancybox-wrap').find('.youtube_msg').html("Please wait...");
 	var url="";
 	url=$('#fancybox-wrap').find("#youtube_url").val();
-	var matches = url.match(/^(https?:\/\/)?([^\/]*\.)?youtube\.com\/watch\?([^]*&)?v=\-\w+(&[^]*)?/i);
+	var matches = url.match(/^(https?:\/\/)?([^\/]*\.)?youtube\.com\/watch\?([^]*&)?v=\w+(&[^]*)?/i);
 	if(matches){
 		var top_div_arr=$("#current_container_id").val().split('_');
 		var top_div=top_div_arr[0];

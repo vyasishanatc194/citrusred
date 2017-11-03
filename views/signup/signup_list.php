@@ -2,9 +2,12 @@
 <link rel="stylesheet" type="text/css" href="<?php echo $this->config->item('webappassets');?>css/jquery.fastconfirm.css?v=6-20-13" media="screen" />
 <script type="text/javascript" src="<?php echo $this->config->item('webappassets');?>js/fancybox/jquery.mousewheel-3.0.4.pack.js?v=6-20-13"></script>
 <script type="text/javascript" src="<?php echo $this->config->item('webappassets');?>js/jquery.blockUI.js?v=6-20-13"></script>
+<script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script>
 <?php echo link_tag('webappassets/css/signup_form.css?v=6-20-13'); ?>
 <script type="text/javascript">
-  $(document).ready(function(){$(".fancybox").fancybox();});
+	$(document).ready(function(){
+		$(".fancybox").fancybox();
+	});
   $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
 </script>
 <script type="text/javascript">

@@ -2390,7 +2390,7 @@ Content-Transfer-Encoding: 8bit";
             $query = "SELECT Id,RedCappi_Username__c, of_Contacts_in_RedCappi_Acct__c, of_Campaigns_in_RedCappi_Acct__c,  of_Live_Campaigns_Sent_from_RC__c, of_logins_in_RedCappi_Acct__c, Last_Login__c, View_RC_Dashboard__c from Lead WHERE RedCappi_Username__c ='$rcusername' LIMIT 1";
 
             $response = $mySforceConnection->query($query);
-           // var_dump("sfdcGetLead Response: " . $response);
+          //  var_dump("sfdcGetLead Response: " . $response);
 
 //declare array for object return
             $arrAccount = array();
@@ -3792,8 +3792,52 @@ Content-Transfer-Encoding: 8bit";
 
 
         }
+		
+		function checkcancellation(){
+		$servey_radio = 'test';
+        $servey_ans = 'testing mail';
+        $member_id = 14249;
+        $current_package = 1;
+
+        $package_array = $this->UserModel->get_packages_data(array('package_id' => $current_package));
+        $amt = $package_array[0]['package_price'];
+
+        $user_data_array = $this->UserModel->get_user_data(array('member_id' => $member_id));
+        $mname = $user_data_array[0]['member_username'];
+        $message = "<p>Hello admin,</p><p>The user is downgraded to free account. Details are as under :</p>
+		<p>Username: $mname [$member_id] </p>
+		<p>Plan Amount: $amt</p>
+		<p>Cancellation Reason: $servey_radio</p>
+		<p>Cancellation Other: $servey_ans</p><br/>
+		<p>Regards,<br />Redcappi Team</p>";
+        $text_message = "User Downgraded: $mname [$member_id]";
+
+        $this->UserModel->update_user_package(array('cancel_type' => $servey_radio, 'cancel_reason' => $servey_ans, 'is_deleted' => 0), array("member_id" => $member_id));
+
+        $site_configuration_array = $this->ConfigurationModel->get_site_configuration_data(array('config_name' => 'admin_email_downgrade'));
+
+        /* send mail to admin */
+        $admin_notification_email = $site_configuration_array[0]['config_value'];
+      //  $admin_notification_email = 'ishan.vyas@citrusbug.com';
+        //admin_notification_send_email('staging.redcappi@gmail.com', SYSTEM_EMAIL_FROM, "RedCappi", "Contacts analysed", $email_msg, $email_msg);
+        admin_notification_send_email($admin_notification_email, SYSTEM_EMAIL_FROM, 'RedCappi', "User downgraded", $message, $text_message);
+        admin_notification_send_email('jui.citrusbug@gmail.com', SYSTEM_EMAIL_FROM, 'RedCappi', "User downgraded", $message, $text_message);
+        admin_notification_send_email('ishan.vyas@citrusbug.com', SYSTEM_EMAIL_FROM, 'RedCappi', "User downgraded", $message, $text_message);
+      //  admin_notification_send_email('harsh.shah@citrusbug.com', SYSTEM_EMAIL_FROM, 'RedCappi', "User downgraded", $message, $text_message);
+		admin_notification_send_email('staging.redcappi@gmail.com', SYSTEM_EMAIL_FROM, 'RedCappi', "User downgraded", $message, $text_message);
+
+
+        $jsonArray['package_id'] = '-1';
+        $jsonArray['member_id'] = $member_id;
+        $jsonArray['status'] = 'success';
+
+        echo json_encode($jsonArray);
+        exit;
+	}
         
     }
+	
+	
 
 
 

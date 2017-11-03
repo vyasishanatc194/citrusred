@@ -46,13 +46,13 @@
 
               <h3 class="signup-tbl-title">Landing Page</h3>
               <div class="signup-tbl-inline">
-                <label class="label">Signup "Thank You" Page</label>
-                <input type="text" size="40" id="singup_thank_you_message_url" value="<?php echo $signup_from['form'][0]['singup_thank_you_message_url'];?>" name="singup_thank_you_message_url">
+                <label class="label">Landing Page when Form is embedded on your site</label>
+                <input type="text" size="40" id="singup_thank_you_message_url" value="<?php echo $signup_from['form'][0]['confirmation_thanks_you_message_url'];?>" name="singup_thank_you_message_url">
               </div>
 
               <div class="signup-tbl-inline">
-                <label class="label">Confirmation Landing Page</label>
-                <input type="text" size="40"  id="confirmation_thanks_you_message_url" value="<?php echo $signup_from['form'][0]['confirmation_thanks_you_message_url'];?>" name="confirmation_thanks_you_message_url">
+                <label class="label">Landing Page when the Signup Form's URL is visited</label>
+                <input type="text" size="40"  id="confirmation_thanks_you_message_url" value="<?php echo $signup_from['form'][0]['singup_thank_you_message_url'];?>" name="confirmation_thanks_you_message_url">
               </div>
 
               <div class="clear-both"></div>

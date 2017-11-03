@@ -835,13 +835,10 @@ jQuery("#email_subject").live('click',function(){
                 Send a Test Email
             </a>
           </div>
-
-          <br/>
-          <div id="link_send_mt_test" class="clear-both">
-            <a class="btn confirm subscr_list" target="_blank" title="Check Your Email Score Prior to Scheduling" href='<?php echo site_url("newsletter/campaign_email_setting/sendTestViaFrontEnd/".$campaign_data['camapign']['campaign_id'] . "/" . $campaign_data['camapign']['campaign_created_by']) ?>'>Check Your Email Score Prior to Scheduling</a>
-          </div>
-   
-
+		   <br/>
+	          <div id="link_send_mt_test" class="clear-both">
+	            <a class="btn confirm subscr_list" target="_blank" title="Check Your Email Score Prior to Scheduling" href='<?php echo site_url("newsletter/campaign_email_setting/sendTestViaFrontEnd/".$campaign_data['camapign']['campaign_id'] . "/" . $campaign_data['camapign']['campaign_created_by']) ?>'>Check Your Email Score Prior to Scheduling</a>
+	          </div>
           <?php if($campaign_data['camapign']['test_email_count']>=25){ ?>
             <div class="test_email_count">
               <div class="info email_msg" style="margin-top:30px;">
@@ -859,7 +856,7 @@ jQuery("#email_subject").live('click',function(){
                   Send
                 </a>
                   
-                <a class="btn cancel inline-block" title="Cancel" href="javascript:void(0);" onclick="javascript:$('.email_address_tr').hide();$('#link_send_test').show();">
+                <a class='btn cancel inline-block" title="Cancel" href="javascript:void(0);" onclick="javascript:$('.email_address_tr').hide();$('#link_send_test').show();">
                   Cancel
                 </a>
               </div>

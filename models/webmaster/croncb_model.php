@@ -10,11 +10,13 @@ class Croncb_Model extends CI_Model {
         $rows = array();
 
         $this->db->select('COUNT(*) as totalcount,rc_member_id,rc_id', 'cp.rc_member_id=rm.subscriber_created_byIndex');
+		//$this->db->join('red_email_subscribers as rm', 'cp.rc_member_id=rm.subscriber_created_by and subscriber_id > last_subscriber_id');
         $this->db->join('red_email_subscribers as rm', 'cp.rc_member_id=rm.subscriber_created_by');
         $this->db->group_by('rc_member_id,rc_id');
 
         $result = $this->db->get_where('red_dv_cron_setup as cp', $conditions_array);
 
+		##echo $this->db->last_query();exit;
         foreach ($result->result_array() as $row) {
             $rows[$row['rc_member_id']]['totalcount'] = $row['totalcount'];
             $rows[$row['rc_member_id']]['member_id'] = $row['rc_member_id'];
@@ -57,6 +59,7 @@ class Croncb_Model extends CI_Model {
 
     function selectCron($conditions_array) {
         $this->db->select('*');
+		$this->db->order_by("rc_id", "desc");
         $result = $this->db->get_where('red_dv_cron_setup as cp', $conditions_array);
         foreach ($result->result_array() as $row) {
             $rows[] = $row;

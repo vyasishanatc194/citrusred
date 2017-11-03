@@ -124,6 +124,7 @@ class datavalidation_cron extends CI_Controller {
               //  }
           //  }
         }
+		
 		 }
         // END upload csv to datavalidation API
         // START job call to datavalidation API
@@ -167,7 +168,7 @@ class datavalidation_cron extends CI_Controller {
 
     function csv_fetch_grade() {
         $DV_API_KEY = $this->config->item('DV_API_KEY');
-
+		$fetchCsvData = array();	
         $headers = array('Content-Type: text/csv', 'Authorization: bearer ' . $DV_API_KEY);
         $fetchCsvData = $this->Croncb_Model->selectSingleCsvCron(array('dv_job_status' => 1,"dv_cron_status" => 2,'dv_batch_grade is NULL' => null));		
 		$finalCountOfcsv = array();
@@ -218,7 +219,9 @@ class datavalidation_cron extends CI_Controller {
             $this->Croncb_Model->updateCron(array("rc_status" => 1), array("rc_id" => $cc_key));
 			
 		}
+		
 	}
+		
 	
     }
 

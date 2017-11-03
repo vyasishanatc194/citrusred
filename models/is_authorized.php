@@ -118,10 +118,14 @@ class Is_authorized extends CI_Model
 			$this->session->set_userdata('member_email_address', $user_data_array[0]['email_address']);
 			$this->session->set_userdata('member_autoresponder_status', $user_data_array[0]['autoresponder_status']);
 			
+			
+			
 		}		
 		
 		return true;
 	}
+	
+	
 
 	function removeCookieTocken($uid){	
 		#$removeTocken ="delete FROM `red_cookie` WHERE `user_id`='$uid'";

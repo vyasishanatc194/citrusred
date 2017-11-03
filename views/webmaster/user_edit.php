@@ -116,12 +116,13 @@ echo "</td>
 </ul>
 </td></tr>";
  
-echo "<tr><td>Next Payment Date<br/>"; 
-echo form_input(array('name'=>'next_payement_date','id'=>'next_payement_date','maxlength'=>50,'size'=>40 ,'value'=>$user_package['next_payement_date'])) ;
-echo '<SCRIPT type="text/javascript"> $(function(){$("#next_payement_date").datepicker({ dateFormat: "yy-mm-dd" });});	</SCRIPT>';
-echo "</td>";
-echo "<td>Coupon-code<br/>"; 
+
+echo "<tr><td>Coupon-code<br/>"; 
 echo form_input(array('name'=>'coupon_code','id'=>'coupon_code','maxlength'=>50,'size'=>40 ,'value'=>$user_package['coupon_code_used'])) ;
+echo "</td>";
+echo "<td>Coupon attached on Date<br/>"; 
+echo form_input(array('name'=>'coupon_attached_on','id'=>'coupon_attached_on','maxlength'=>50,'size'=>40 ,'value'=>$user_package['coupon_attached_on'])) ;
+echo '<SCRIPT type="text/javascript"> $(function(){$("#coupon_attached_on").datepicker({ dateFormat: "yy-mm-dd" });});	</SCRIPT>';
 echo "</td>";
 echo "<td rowspan='2'>"; 
 $is_checked = ($user['stop_campaign_approval'])? 'checked' : ''; 
@@ -136,8 +137,12 @@ $is_checked = ($user['reply_to_enabled'])? 'checked' : '';
 echo "<br/> \"Reply-to\" Enabled <input type='checkbox' name='reply_to_enabled' id='reply_to_enabled' value='yes' $is_checked />";
 echo "</td></tr>";
   
-echo "<tr><td colspan='2'>Attach Referrer<br/>"; 
+echo "<tr><td>Attach Referrer<br/>"; 
 echo form_dropdown('referrer',$referrer,$user['ls_site_id']);
+echo "</td>";
+ echo "<td>Next Payment Date<br/>"; 
+echo form_input(array('name'=>'next_payement_date','id'=>'next_payement_date','maxlength'=>50,'size'=>40 ,'value'=>$user_package['next_payement_date'])) ;
+echo '<SCRIPT type="text/javascript"> $(function(){$("#next_payement_date").datepicker({ dateFormat: "yy-mm-dd" });});	</SCRIPT>';
 echo "</td></tr>";
  
 echo "<tr><td>Cancellation Reason<br/>"; 
